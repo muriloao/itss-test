@@ -1,0 +1,30 @@
+<p-panel>
+    <p-header>
+        Efetuar login
+    </p-header>
+    <form [formGroup]="loginForm" layout="column" layout-align="center center">
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-6 ui-md-6">
+                    <div class="ui-inputgroup">
+                        <input type="text" pInputText placeholder="Usuário" formControlName="email">
+                    </div>
+                    <p-message severity="error" text="{{errors.email}}" *ngIf="errors.email != ''"></p-message>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-6 ui-md-6">
+                    <div class="ui-inputgroup">
+                        <input type="password" pInputText placeholder="Senha" formControlName="password">
+                    </div>
+                    <p-message severity="error" text="{{errors.password}}" *ngIf="errors.password != ''"></p-message>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p-footer>
+        <button pButton type="button" label="Acessar" (click)="register()"
+            class="ui-button-rounded ui-button-success"></button>
+            <p-message *ngIf="message.value" severity="{{message.type}}" text="{{message.value}}"></p-message>
+    </p-footer>
+</p-panel>

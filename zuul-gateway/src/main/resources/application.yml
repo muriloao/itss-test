@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: ${SERVICE_NAME:zuul-gateway}
+
+server:
+  port: ${SERVICE_PORT:8080}
+
+eureka:
+  instance:
+    hostname: ${EUREKA_HOST:eureka-server}
+    port: ${EUREKA_PORT:8761}
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+
+zuul:
+  prefix: ${ZUUL_PREFIX:/api}
+  ignoredServices: '*'
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+  routes:
+    oauth-server:
+      sensitiveHeaders:
+      path: /auth/**
+      url: http://oauth-server:9096
+    customer-service:
+      sensitiveHeaders:
+      path: /customer/**
+      url: http://customer-service:9093
+    car-service:
+      sensitiveHeaders:
+      path: /car/**
+      url: http://car-service:9094
+    parking-service:
+      sensitiveHeaders:
+      path: /parking/**
+      url: http://parking-service:9095
+    frontend:
+      path: /app/**
+      url: http://frontend:3000
+    eureka-server:
+      path: /
+      url: http://eureka-server:8761
+
+management:
+  security:
+    enabled: false

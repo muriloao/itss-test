@@ -1,0 +1,32 @@
+<form [formGroup]="carForm" layout="column" layout-align="center center">
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-inputgroup">
+                <input type="text" pInputText placeholder="Placa" formControlName="board">
+            </div>
+            <p-message severity="error" text="{{errors.board}}" *ngIf="errors.board != ''"></p-message>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-inputgroup">
+                <input type="text" pInputText placeholder="Modelo" formControlName="model">
+            </div>
+            <p-message severity="error" text="{{errors.model}}" *ngIf="errors.model != ''"></p-message>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-inputgroup">
+                <input ng- type="text" pInputText placeholder="Cor" formControlName="color">
+            </div>
+            <p-message severity="error" text="{{errors.color}}" *ngIf="errors.color != ''"></p-message>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <p-multiSelect formControlName="customer" selectionLimit="1" [options]="customers"></p-multiSelect>
+        </div>
+        <p-message severity="error" text="{{errors.customer}}" *ngIf="errors.customer != ''"></p-message>
+        <div class="ui-g-12 ui-md-12">
+            <button style="width: 150px;" pButton type="button" label="Registrar veículo"
+                class="ui-button-rounded ui-button-success" (click)="register()"></button>
+            <p-message *ngIf="message.value" severity="{{message.type}}" text="{{message.value}}"></p-message>
+        </div>
+
+    </div>
+</form>

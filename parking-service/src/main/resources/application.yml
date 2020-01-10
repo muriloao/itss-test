@@ -1,0 +1,49 @@
+server:
+  port: ${SERVICE_PORT:9095}
+  connection:
+    timeout: 20000
+
+eureka:
+  instance:
+    hostname: ${EUREKA_HOST:eureka-server}
+    port: ${EUREKA_PORT:8761}
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+    healthcheck:
+      enabled: true
+    lease:
+      duration: 5
+
+spring:
+  application:
+    name: ${SERVICE_NAME:parking-service}
+  devtools:
+    remote:
+      secret: mysecret
+  datasource:
+    driver-class-name: ${DATASOURCE_DRIVER_CLASSNAME:org.postgresql.Driver}
+    platform: ${DATASOURCE_PLATFORM:postgres}
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/itss?verifyServerCertificate=false&useSSL=false&requireSSL=false}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:123456789}
+
+  jpa:
+    database: POSTGRESQL
+    generate-ddl: false
+    hibernate:
+      ddl-auto: ${JPA_HIBERNATE_DLL_AUTO:update}
+    show-sql: true
+
+management:
+  security:
+    enabled: false
+
+authserver:
+  hostname: ${OAUTH_SERVER:http://localhost:9096}
+security:
+  oauth2:
+    resource:
+      userInfoUri: ${authserver.hostname}/user

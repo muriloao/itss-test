@@ -1,0 +1,64 @@
+<app-header></app-header>
+
+<div class="p-col-12">
+    <!-- CHECKOUT -->
+    <p-fieldset legend="{{editId ? 'Atualizar cliente' : 'Registrar cliente'}}" [toggleable]="true">
+        <form [formGroup]="customerForm" layout="column" layout-align="center center">
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-inputgroup">
+                        <input type="text" pInputText placeholder="Nome completo" formControlName="name">
+                    </div>
+                    <p-message severity="error" text="{{errors.name}}" *ngIf="errors.name != ''"></p-message>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-inputgroup">
+                        <input type="text" maxlength="11" pInputText placeholder="CPF" formControlName="cpf">
+                    </div>
+                    <p-message severity="error" text="{{errors.cpf}}" *ngIf="errors.cpf != ''"></p-message>
+
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-inputgroup">
+                        <input ng- type="number" maxlength="11" pInputText placeholder="Telefone" formControlName="phone">
+                    </div>
+                    <p-message severity="error" text="{{errors.phone}}" *ngIf="errors.phone != ''"></p-message>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <button style="width: 150px;" pButton type="button"
+                        label="{{editId ? 'Atualizar cliente' : 'Registrar cliente'}}"
+                        class="ui-button-rounded ui-button-success" (click)="register()"></button>
+                    <button *ngIf="editId" style="width: 150px;" pButton type="button" label="Cancelar"
+                        class="ui-button-rounded ui-button-warning" (click)="cancelEdit()"></button>
+                    <p-message *ngIf="message.value" severity="{{message.type}}" text="{{message.value}}"></p-message>
+                </div>
+            </div>
+        </form>
+    </p-fieldset>
+</div>
+<p-table [columns]="cols" [value]="customers" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+            <th>
+                Ações
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+            <td>
+                <button style="width: 100px;" pButton type="button" label="Editar"
+                    class="ui-button-rounded ui-button-info" (click)="modalEdit(rowData)"></button>
+                <button style="width: 100px;" pButton type="button" label="Excluir"
+                    class="ui-button-rounded ui-button-danger" (click)="modalDelete(rowData)"></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>

@@ -1,0 +1,27 @@
+<form [formGroup]="parkingForm" layout="column" layout-align="center center">
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-inputgroup">
+                <input type="text" pInputText placeholder="Descrição" formControlName="description">
+            </div>
+            <p-message severity="error" text="{{errors.description}}" *ngIf="errors.description != ''"></p-message>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-inputgroup">
+                <input type="text" pInputText placeholder="Preço/hora" formControlName="price">
+            </div>
+            <p-message severity="error" text="{{errors.price}}" *ngIf="errors.price != ''"></p-message>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-inputgroup">
+                <input ng- type="text" pInputText placeholder="Vagas" formControlName="slots">
+            </div>
+            <p-message severity="error" text="{{errors.slots}}" *ngIf="errors.slots != ''"></p-message>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <button style="width: 150px;" pButton type="button" label="Registrar pátio"
+                class="ui-button-rounded ui-button-success" (click)="register()"></button>
+            <p-message *ngIf="message.value" severity="{{message.type}}" text="{{message.value}}"></p-message>
+        </div>
+    </div>
+</form>

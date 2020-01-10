@@ -1,0 +1,28 @@
+<form [formGroup]="customerForm" layout="column" layout-align="center center">
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-inputgroup">
+                <input type="text" pInputText placeholder="Nome completo" formControlName="name">
+            </div>
+            <p-message severity="error" text="{{errors.name}}" *ngIf="errors.name != ''"></p-message>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-inputgroup">
+                <input type="text" pInputText placeholder="CPF" formControlName="cpf">
+            </div>
+            <p-message severity="error" text="{{errors.cpf}}" *ngIf="errors.cpf != ''"></p-message>
+
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-inputgroup">
+                <input ng- type="text" pInputText placeholder="Telefone" formControlName="phone">
+            </div>
+            <p-message severity="error" text="{{errors.phone}}" *ngIf="errors.phone != ''"></p-message>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <button style="width: 150px;" pButton type="button" label="Registrar cliente"
+                class="ui-button-rounded ui-button-success" (click)="register()"></button>
+            <p-message *ngIf="message.value" severity="{{message.type}}" text="{{message.value}}"></p-message>
+        </div>
+    </div>
+</form>

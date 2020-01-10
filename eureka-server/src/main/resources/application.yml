@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: ${SERVICE_NAME:eureka-server}
+
+server:
+  port: ${SERVICE_PORT:8761}
+
+eureka:
+  instance:
+    hostname: ${EUREKA_HOST:eureka-server}
+    port: ${EUREKA_PORT:8761}
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+  server:
+    enableSelfPreservation: false
+# eureka:
+#   instance:
+#     hostname: ${SERVICE_NAME:eureka-server}
+#     port: ${server.port}
+#   client:
+#     registerWithEureka: false
+#     fetchRegistry: false
+#     serviceUrl:
+#       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+#     healthcheck:
+#       enabled: true
+#   server:
+#     enableSelfPreservation: false
+#     wait-time-in-ms-when-sync-empty: 3000
+management:
+  security:
+    enabled: false

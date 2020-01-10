@@ -1,0 +1,65 @@
+<app-header></app-header>
+
+<div class="p-grid">
+    <div *ngFor="let parking of parkings" class="p-col-3">
+
+        <p-card header={{parking.description}} [style]="{width: '360px'}" styleClass="ui-card-shadow">
+            <p-header>
+                <p-chart type="pie" [data]="parking.chart"></p-chart>
+            </p-header>
+        </p-card>
+
+    </div>
+</div>
+
+<div class="p-grid">
+    <div class="p-col-3">
+        <!-- CHECKIN -->
+        <p-fieldset legend="Checkin" [toggleable]="true">
+            <form [formGroup]="checkinForm" layout="column" layout-align="center center">
+                <div class="ui-g ui-fluid">
+
+                    <div class="ui-g-12 ui-md-12">
+                        <p-multiSelect formControlName="parking" selectionLimit="1" [options]="labelParkings">
+                        </p-multiSelect>
+                        <p-message severity="error" text="{{errorsIn.parking}}" *ngIf="errorsIn.parking != ''">
+                        </p-message>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <p-multiSelect formControlName="car" selectionLimit="1" [options]="carsCheckin"></p-multiSelect>
+                        <p-message severity="error" text="{{errorsIn.car}}" *ngIf="errorsIn.car != ''"></p-message>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <button style="width: 150px;" pButton type="button" label="Checkin"
+                            class="ui-button-rounded ui-button-success" (click)="checkin()"></button>
+                        <p-message *ngIf="message.value" severity="{{message.type}}" text="{{message.value}}">
+                        </p-message>
+                    </div>
+
+                </div>
+            </form>
+        </p-fieldset>
+    </div>
+
+    <div class="p-col-3">
+        <!-- CHECKOUT -->
+        <p-fieldset legend="Checkout" [toggleable]="true">
+            <form [formGroup]="checkoutForm" layout="column" layout-align="center center">
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-md-12">
+                        <p-multiSelect formControlName="car" selectionLimit="1" [options]="carsCheckout">
+                        </p-multiSelect>
+                        <p-message severity="error" text="{{errorsOut.car}}" *ngIf="errorsOut.car != ''"></p-message>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <button style="width: 150px;" pButton type="button" label="Checkout"
+                            class="ui-button-rounded ui-button-success" (click)="checkout()"></button>
+                        <p-message *ngIf="messageOut.value" severity="{{messageOut.type}}" text="{{messageOut.value}}">
+                        </p-message>
+                    </div>
+                </div>
+            </form>
+        </p-fieldset>
+    </div>
+</div>

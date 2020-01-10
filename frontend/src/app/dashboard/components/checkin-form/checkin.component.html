@@ -1,0 +1,20 @@
+<form [formGroup]="checkinForm" layout="column" layout-align="center center">
+    <div class="ui-g ui-fluid">
+
+        <div class="ui-g-12 ui-md-12">
+            <p-multiSelect formControlName="parking" selectionLimit="1" [options]="parkings"></p-multiSelect>
+            <p-message severity="error" text="{{errors.parking}}" *ngIf="errors.parking != ''"></p-message>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <p-multiSelect formControlName="car" selectionLimit="1" [options]="cars"></p-multiSelect>
+            <p-message severity="error" text="{{errors.car}}" *ngIf="errors.car != ''"></p-message>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <button style="width: 150px;" pButton type="button" label="Checkin"
+                class="ui-button-rounded ui-button-success" (click)="registerCheckin()"></button>
+            <p-message *ngIf="message.value" severity="{{message.type}}" text="{{message.value}}"></p-message>
+        </div>
+
+    </div>
+</form>

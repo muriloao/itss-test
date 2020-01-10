@@ -1,0 +1,68 @@
+<app-header></app-header>
+
+<div class="p-col-12">
+    <!-- CHECKOUT -->
+    <p-fieldset legend="{{editId ? 'Atualizar veículo' : 'Registrar veículo'}}" [toggleable]="true">
+        <form [formGroup]="carForm" layout="column" layout-align="center center">
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-inputgroup">
+                        <input type="text" maxlength="7" pInputText placeholder="Placa" formControlName="board">
+                    </div>
+                    <p-message severity="error" text="{{errors.board}}" *ngIf="errors.board != ''"></p-message>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-inputgroup">
+                        <input type="text" pInputText placeholder="Modelo" formControlName="model">
+                    </div>
+                    <p-message severity="error" text="{{errors.model}}" *ngIf="errors.model != ''"></p-message>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-inputgroup">
+                        <input ng- type="text" pInputText placeholder="Cor" formControlName="color">
+                    </div>
+                    <p-message severity="error" text="{{errors.color}}" *ngIf="errors.color != ''"></p-message>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <p-multiSelect formControlName="customer" selectionLimit="1" [options]="customers"></p-multiSelect>
+                </div>
+                <p-message severity="error" text="{{errors.customer}}" *ngIf="errors.customer != ''"></p-message>
+                <div class="ui-g-12 ui-md-12">
+                    <button style="width: 150px;" pButton type="button"
+                        label="{{editId ? 'Atualizar veículo' : 'Registrar veículo'}}"
+                        class="ui-button-rounded ui-button-success" (click)="register()"></button>
+                    <button *ngIf="editId" style="width: 150px;" pButton type="button" label="Cancelar"
+                        class="ui-button-rounded ui-button-warning" (click)="cancelEdit()"></button>
+                    <p-message *ngIf="message.value" severity="{{message.type}}" text="{{message.value}}"></p-message>
+                </div>
+
+            </div>
+        </form>
+    </p-fieldset>
+</div>
+<p-table [columns]="cols" [value]="cars" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+            <th>
+                Ações
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+            <td>
+                <button style="width: 100px;" pButton type="button" label="Editar"
+                    class="ui-button-rounded ui-button-info" (click)="modalEdit(rowData)"></button>
+                <button style="width: 100px;" pButton type="button" label="Excluir"
+                    class="ui-button-rounded ui-button-danger" (click)="modalDelete(rowData)"></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>

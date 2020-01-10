@@ -1,0 +1,173 @@
+version: "3"
+volumes:
+  data:
+services:
+  eureka-server:
+    image: eureka-server
+    ports:
+     - "8761:8761"
+    networks:
+      - postgres-compose-network
+
+  zuul-gateway:
+    image: zuul-gateway
+    expose:
+     - 8080
+    depends_on:
+      - eureka-server
+    ports:
+     - "8080:8080"
+    environment:
+      SERVICE_NAME: zuul-gateway
+      SERVICE_PORT: 8080
+      EUREKA_HOST: ${EUREKA_HOST}
+      EUREKA_PORT: ${EUREKA_PORT}
+      ZUUL_PREFIX: /api
+    networks:
+      - postgres-compose-network
+
+  oauth-server:
+    image: oauth-server
+    ports:
+      - "9096:9096"
+    depends_on:
+      - eureka-server
+      - database
+      - customer-service
+    links:
+      - zuul-gateway
+      - eureka-server
+    environment:
+      SERVICE_NAME: oauth-server
+      SERVICE_PORT: 9096
+      EUREKA_HOST: ${EUREKA_HOST}
+      EUREKA_PORT: ${EUREKA_PORT}
+      HOST_GATEWAY: ${HOST_GATEWAY}
+      DATASOURCE_DRIVER_CLASSNAME: ${DATASOURCE_DRIVER_CLASSNAME}
+      DATASOURCE_PLATFORM: ${DATASOURCE_PLATFORM}
+      DATASOURCE_URL: ${DATASOURCE_URL}
+      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
+      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
+      JPA_HIBERNATE_DLL_AUTO: ${JPA_HIBERNATE_DLL_AUTO}
+      OAUTH_SERVER: ${OAUTH_SERVER}
+    networks:
+      - postgres-compose-network
+
+  customer-service:
+    image: customer-service
+    ports: 
+      - "9093:9093"
+    depends_on:
+      - eureka-server
+      - database
+    links:
+      - zuul-gateway
+      - eureka-server
+    environment:
+      SERVICE_NAME: customer-service
+      SERVICE_PORT: 9093
+      EUREKA_HOST: ${EUREKA_HOST}
+      EUREKA_PORT: ${EUREKA_PORT}
+      HOST_GATEWAY: ${HOST_GATEWAY}
+      DATASOURCE_DRIVER_CLASSNAME: ${DATASOURCE_DRIVER_CLASSNAME}
+      DATASOURCE_PLATFORM: ${DATASOURCE_PLATFORM}
+      DATASOURCE_URL: ${DATASOURCE_URL}
+      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
+      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
+      JPA_HIBERNATE_DLL_AUTO: ${JPA_HIBERNATE_DLL_AUTO}
+      OAUTH_SERVER: ${OAUTH_SERVER}
+    networks:
+      - postgres-compose-network
+
+  car-service:
+    image: car-service
+    ports: 
+      - "9094:9094"
+    depends_on:
+      - eureka-server
+      - customer-service
+    environment:
+      SERVICE_NAME: car-service
+      SERVICE_PORT: 9094
+      EUREKA_HOST: ${EUREKA_HOST}
+      EUREKA_PORT: ${EUREKA_PORT}
+      HOST_GATEWAY: ${HOST_GATEWAY}
+      DATASOURCE_DRIVER_CLASSNAME: ${DATASOURCE_DRIVER_CLASSNAME}
+      DATASOURCE_PLATFORM: ${DATASOURCE_PLATFORM}
+      DATASOURCE_URL: ${DATASOURCE_URL}
+      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
+      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
+      JPA_HIBERNATE_DLL_AUTO: none
+      OAUTH_SERVER: ${OAUTH_SERVER}
+    networks:
+      - postgres-compose-network
+
+  parking-service:
+    image: parking-service
+    ports:
+      - "9095:9095"
+    depends_on:
+      - eureka-server
+      - customer-service
+    environment:
+      SERVICE_NAME: parking-service
+      SERVICE_PORT: 9095
+      EUREKA_HOST: ${EUREKA_HOST}
+      EUREKA_PORT: ${EUREKA_PORT}
+      HOST_GATEWAY: ${HOST_GATEWAY}
+      DATASOURCE_DRIVER_CLASSNAME: ${DATASOURCE_DRIVER_CLASSNAME}
+      DATASOURCE_PLATFORM: ${DATASOURCE_PLATFORM}
+      DATASOURCE_URL: ${DATASOURCE_URL}
+      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
+      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
+      JPA_HIBERNATE_DLL_AUTO: none
+      OAUTH_SERVER: ${OAUTH_SERVER}
+    networks:
+      - postgres-compose-network
+
+  database:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "123456789"
+      POSTGRES_DB: itsstest
+    ports:
+      - "15432:5432"
+    expose: 
+     - 5432
+    volumes:
+      - "./data/postgres:/usr/src/app/postgres"
+      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
+    networks:
+      - postgres-compose-network
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "murilo.ao@hotmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "123456789"
+    ports:
+      - "16543:80"
+    depends_on:
+      - database
+    networks:
+      - postgres-compose-network
+
+  frontend:
+    build: ./frontend
+    expose:
+      - 4200
+    ports:
+      - 4200:4200
+    volumes:
+      - ./frontend/src:/usr/src/app/src
+      - ./frontend/public:/usr/src/app/public
+    command: > 
+      bash -c "npm install && ng serve --host 0.0.0.0 --port 4200"
+    environment:
+      HOST_GATEWAY: ${HOST_GATEWAY}
+    networks:
+      - postgres-compose-network
+
+networks: 
+  postgres-compose-network:
+    driver: bridge
